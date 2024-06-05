@@ -33,12 +33,12 @@ def store_liquidation_data(liquidation):
 def check_for_new_entries(liquidations):
     conn = sqlite3.connect('liquidations.db')
     c = conn.cursor()
-    c.execute('SELECT company_name, acn FROM liquidations')
+    c.execute('SELECT company_name, acn, date_published FROM liquidations')
     existing_data = c.fetchall()
     existing_set = set(existing_data)
 
     for liquidation in liquidations:
-        liquidation_tuple = (liquidation['company_name'], liquidation['acn'])
+        liquidation_tuple = (liquidation['company_name'], liquidation['acn'], liquidation['date_published'])
         if liquidation_tuple not in existing_set:
             store_liquidation_data(liquidation)
             send_email_notification(liquidation)
